@@ -1,5 +1,5 @@
 <Solution>
-  <Project Path="Cambist.API/Cambist.API.csproj" />
+  <Project Path="Cambist.API/Cambist.Api.csproj" />
   <Project Path="Cambist.Core/Cambist.Core.csproj" />
   <Project Path="Cambist.Infrastructure/Cambist.Infrastructure.csproj" />
 </Solution>
