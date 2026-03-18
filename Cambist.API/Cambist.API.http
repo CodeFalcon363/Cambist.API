@@ -1,0 +1,6 @@
+@Cambist.API_HostAddress = http://localhost:5143
+
+GET {{Cambist.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
