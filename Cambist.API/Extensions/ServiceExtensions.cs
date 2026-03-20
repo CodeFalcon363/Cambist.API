@@ -1,8 +1,9 @@
-﻿using Cambist.Infrastructure.Interfaces;
+﻿using AutoMapper;
+using Cambist.Infrastructure.ExternalServices;
+using Cambist.Infrastructure.Interfaces;
 using Cambist.Infrastructure.Mappings;
 using Cambist.Infrastructure.Repositories;
-using Cambist.Infrastructure.ExternalServices;
-using AutoMapper;
+using Cambist.Infrastructure.Services;
 
 namespace Cambist.Api.Extensions
 {
@@ -15,6 +16,7 @@ namespace Cambist.Api.Extensions
             services.AddScoped<IWatchlistRepository, WatchlistRepository>();
             services.AddScoped<ICurrencyRepository, CurrencyRepository>();
             services.AddScoped<ExchangeRateService>();
+            services.AddScoped<ICurrencyService, CurrencyService>();
             return services;
         }
     }

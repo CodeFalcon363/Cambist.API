@@ -31,10 +31,15 @@ namespace Cambist.Infrastructure.Repositories
             }
         }
 
-        public async Task<IEnumerable<WatchlistItem>> GetAllAsync()
+        public async Task<(IEnumerable<WatchlistItem>, int totalRecords)> GetAllAsync(int pageNumber, int pageSize)
         {
-            var watchlistItem = await _context.WatchlistItems.ToListAsync();
-            return watchlistItem;
+            var totalCount = await _context.WatchlistItems.CountAsync();
+            var watchlistItem = await _context.WatchlistItems
+                .Skip((pageNumber -1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return (watchlistItem, totalCount);
         }
     }
 }

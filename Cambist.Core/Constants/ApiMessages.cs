@@ -7,6 +7,7 @@
         public const string WatchlistItemAdded = "Watchlist item added.";
         public const string RecordRetrieved = "Record retrieved successfully.";
         public const string RecordsRetrieved = "Records retrieved successfully.";
+        public const string RecordDeleted = "Record deleted successfully";
 
         // Not Found Messages
         public const string CurrencyNotFound = "Currency not found.";
@@ -18,6 +19,5 @@
         public const string InternalError = "An unexpected error occurred. Please try again later.";
         public const string InvalidInput = "The provided input is invalid.";
         public const string Unauthorized = "You are not authorized to perform this action.";
-        
     }
 }

@@ -4,7 +4,8 @@ namespace Cambist.Infrastructure.Interfaces
 {
     public interface ICurrencyRepository
     {
-        Task<IEnumerable<Currency>> GetAllAsync();
+        Task<(IEnumerable<Currency>, int totalRecords)> GetAllAsync(int pageNumber, int pageSize);
         Task<Currency?> GetByCodeAsync(string code);
     }
 }
+ 

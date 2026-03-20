@@ -20,10 +20,14 @@ namespace Cambist.Infrastructure.Repositories
             return record;
         }
 
-        public async Task<IEnumerable<ConversionRecord>> GetAllAsync()
+        public async Task<(IEnumerable<ConversionRecord>, int totalRecords)> GetAllAsync(int pageNumber, int pageSize)
         {
-            var records = await _context.ConversionRecords.ToListAsync();
-            return records;
+            var totalCount = await _context.ConversionRecords.CountAsync();
+            var records = await _context.ConversionRecords
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+            return (records, totalCount);
         }
 
         public async Task<ConversionRecord?> GetByIdAsync(int id)
