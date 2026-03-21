@@ -15,8 +15,10 @@ namespace Cambist.Api.Extensions
             services.AddScoped<IConversionRepository, ConversionRepository>();
             services.AddScoped<IWatchlistRepository, WatchlistRepository>();
             services.AddScoped<ICurrencyRepository, CurrencyRepository>();
-            services.AddScoped<ExchangeRateService>();
+            services.AddScoped<IExchangeRateService, ExchangeRateService>();
             services.AddScoped<ICurrencyService, CurrencyService>();
+            services.AddScoped<IWatchlistService, WatchlistService>();
+            services.AddScoped<IConversionService, ConversionService>();
             return services;
         }
     }

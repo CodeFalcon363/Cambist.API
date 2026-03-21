@@ -1,5 +1,6 @@
 ﻿using Cambist.Core.Data;
 using Cambist.Core.Entities;
+using Cambist.Core.Models.Requests;
 using Cambist.Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,8 +14,19 @@ namespace Cambist.Infrastructure.Repositories
         {
             _context = context;
         }
-        public async Task<ConversionRecord> AddAsync(ConversionRecord record)
+        //public async Task<ConversionRecord> AddAsync(ConversionRecord record)
+        public async Task<ConversionRecord> AddAsync(ConvertCurrencyRequest request, decimal rate, decimal convertedAmount)
+
         {
+            var record = new ConversionRecord
+            {
+                FromCurrency = request.FromCurrency,
+                ToCurrency = request.ToCurrency,
+                Amount = request.Amount,
+                ConvertedAmount = convertedAmount,
+                Rate = rate,
+                ConvertedAt = DateTime.UtcNow
+            };
             await _context.ConversionRecords.AddAsync(record);
             await _context.SaveChangesAsync();
             return record;

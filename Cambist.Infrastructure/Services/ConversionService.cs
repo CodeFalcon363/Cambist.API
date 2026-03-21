@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Cambist.Core.Constants;
-using Cambist.Core.Entities;
 using Cambist.Core.Models;
 using Cambist.Core.Models.Requests;
 using Cambist.Core.Models.Responses;
@@ -14,20 +13,33 @@ namespace Cambist.Infrastructure.Services
         private readonly ILogger<ConversionService> _logger;
         private readonly IMapper _mapper;
         private readonly IConversionRepository _record;
+        private readonly IExchangeRateService _exchangeservice;
 
-        public ConversionService(ILogger<ConversionService> logger, IMapper mapper, IConversionRepository record)
+        public ConversionService(ILogger<ConversionService> logger, IMapper mapper, IConversionRepository record, IExchangeRateService exchangeService)
         {
             _logger = logger;
             _mapper = mapper;
             _record = record;
+            _exchangeservice = exchangeService;
         }
 
-        public async Task<ApiResponse<ConversionRecordResponse>> AddAsync(ConvertCurrencyRequest record)
+        public async Task<ApiResponse<ConversionRecordResponse>> AddAsync(ConvertCurrencyRequest request)
         {
             try
             {
-                var mappedConversion = _mapper.Map<ConversionRecord>(record);
-                var conversion = await _record.AddAsync(mappedConversion);
+                var exchangeRate = await _exchangeservice.GetExchangeRateAsync(request.FromCurrency, request.ToCurrency);
+                if (exchangeRate == null)
+                {
+                    return new ApiResponse<ConversionRecordResponse>
+                    {
+                        Success = false,
+                        Message = ApiMessages.ExchangeRateFetchFailed
+                    };
+                }
+                var rate = exchangeRate.Rate;
+                var convertedAmount = rate * request.Amount;
+                var conversion = await _record.AddAsync(request, rate, convertedAmount );
+
                 var mappedResponse = _mapper.Map<ConversionRecordResponse>(conversion);
                 var response = new ApiResponse<ConversionRecordResponse>
                 {
