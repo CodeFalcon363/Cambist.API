@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cambist.Core.Migrations
 {
     [DbContext(typeof(CambistDbContext))]
-    [Migration("20260318150025_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260321192854_SeededCurrencies")]
+    partial class SeededCurrencies
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,10 +34,12 @@ namespace Cambist.Core.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 8)
+                        .HasColumnType("decimal(18,8)");
 
                     b.Property<decimal>("ConvertedAmount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 8)
+                        .HasColumnType("decimal(18,8)");
 
                     b.Property<DateTime>("ConvertedAt")
                         .HasColumnType("datetime2");
@@ -47,7 +49,8 @@ namespace Cambist.Core.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Rate")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(18, 8)
+                        .HasColumnType("decimal(18,8)");
 
                     b.Property<string>("ToCurrency")
                         .IsRequired()
@@ -68,7 +71,7 @@ namespace Cambist.Core.Migrations
 
                     b.Property<string>("CurrencyCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CurrencyName")
                         .IsRequired()
@@ -80,7 +83,40 @@ namespace Cambist.Core.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CurrencyCode")
+                        .IsUnique();
+
                     b.ToTable("Currencies");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CurrencyCode = "NGN",
+                            CurrencyName = "Nigerian Naira",
+                            Symbol = "₦"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CurrencyCode = "USD",
+                            CurrencyName = "US Dollar",
+                            Symbol = "$"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CurrencyCode = "EUR",
+                            CurrencyName = "Euro",
+                            Symbol = "€"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CurrencyCode = "GBP",
+                            CurrencyName = "British Pound Sterling",
+                            Symbol = "£"
+                        });
                 });
 
             modelBuilder.Entity("Cambist.Core.Entities.WatchlistItem", b =>

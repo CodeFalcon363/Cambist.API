@@ -14,9 +14,7 @@ namespace Cambist.Infrastructure.Repositories
         {
             _context = context;
         }
-        //public async Task<ConversionRecord> AddAsync(ConversionRecord record)
         public async Task<ConversionRecord> AddAsync(ConvertCurrencyRequest request, decimal rate, decimal convertedAmount)
-
         {
             var record = new ConversionRecord
             {

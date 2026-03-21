@@ -8,17 +8,13 @@ namespace Cambist.Infrastructure.ExternalServices
 {
     public class ExchangeRateService : IExchangeRateService
     {
-        
         private readonly RestClient _client;
-        private readonly IConfiguration _configuration;
         private readonly ILogger<ExchangeRateService> _logger;
 
         public ExchangeRateService(IConfiguration configuration, ILogger<ExchangeRateService> logger)
         {
-            _configuration = configuration;
             _logger = logger;
-            _client = new RestClient(_configuration["ExchangeRateApi:BaseUrl"]);
-            
+            _client = new RestClient(configuration["ExchangeRateApi:BaseUrl"]);
         }
         public async Task<ExchangeRateResponse?> GetExchangeRateAsync(string baseCurrency, string targetCurrency)
         {

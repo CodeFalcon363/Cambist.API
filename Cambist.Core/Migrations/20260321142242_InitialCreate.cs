@@ -19,9 +19,9 @@ namespace Cambist.Core.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FromCurrency = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ToCurrency = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ConvertedAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Rate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,8)", precision: 18, scale: 8, nullable: false),
+                    ConvertedAmount = table.Column<decimal>(type: "decimal(18,8)", precision: 18, scale: 8, nullable: false),
+                    Rate = table.Column<decimal>(type: "decimal(18,8)", precision: 18, scale: 8, nullable: false),
                     ConvertedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>

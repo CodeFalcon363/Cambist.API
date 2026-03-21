@@ -14,19 +14,32 @@ namespace Cambist.Infrastructure.Services
         private readonly IMapper _mapper;
         private readonly IConversionRepository _record;
         private readonly IExchangeRateService _exchangeservice;
+        private readonly ICurrencyService _currency;
 
-        public ConversionService(ILogger<ConversionService> logger, IMapper mapper, IConversionRepository record, IExchangeRateService exchangeService)
+        public ConversionService(ILogger<ConversionService> logger, IMapper mapper, IConversionRepository record, IExchangeRateService exchangeService, ICurrencyService currency)
         {
             _logger = logger;
             _mapper = mapper;
             _record = record;
             _exchangeservice = exchangeService;
+            _currency = currency;
         }
 
         public async Task<ApiResponse<ConversionRecordResponse>> AddAsync(ConvertCurrencyRequest request)
         {
             try
             {
+                var fromCurrencyCheck = await _currency.GetByCodeAsync(request.FromCurrency);
+                var toCurrencyCheck = await _currency.GetByCodeAsync(request.ToCurrency);
+                if (fromCurrencyCheck.Success == false || toCurrencyCheck.Success == false)
+                {
+                    return new ApiResponse<ConversionRecordResponse>
+                    {
+                        Success = false,
+                        Message = ApiMessages.CurrencyNotFound
+                    };
+
+                }
                 var exchangeRate = await _exchangeservice.GetExchangeRateAsync(request.FromCurrency, request.ToCurrency);
                 if (exchangeRate == null)
                 {
@@ -88,11 +101,19 @@ namespace Cambist.Infrastructure.Services
             }
         }
 
-        public async Task<ApiResponse<ConversionRecordResponse?>> GetByIdAsync(int id)
+        public async Task<ApiResponse<ConversionRecordResponse>> GetByIdAsync(int id)
         {
             try
             {
                 var record = await _record.GetByIdAsync(id);
+                if (record == null)
+                {
+                    return new ApiResponse<ConversionRecordResponse>
+                    {
+                        Success = false,
+                        Message = ApiMessages.RequestNotFound
+                    };
+                }
                 var mappedResponse = _mapper.Map<ConversionRecordResponse>(record);
                 var response = new ApiResponse<ConversionRecordResponse>
                 {
@@ -105,7 +126,7 @@ namespace Cambist.Infrastructure.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                return new ApiResponse<ConversionRecordResponse?>
+                return new ApiResponse<ConversionRecordResponse>
                 {
                     Success = false,
                     Message = ApiMessages.InternalError

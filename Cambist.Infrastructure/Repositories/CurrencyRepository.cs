@@ -1,7 +1,5 @@
 ﻿using Cambist.Core.Data;
 using Cambist.Core.Entities;
-using Cambist.Core.Models;
-using Cambist.Core.Models.Requests;
 using Cambist.Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,11 +13,6 @@ namespace Cambist.Infrastructure.Repositories
         {
             _context = context;
         }
-        //public async Task<IEnumerable<Currency>> GetAllAsync()
-        //{
-        //    var currencies = await _context.Currencies.ToListAsync();
-        //    return currencies;
-        //}
 
         public async Task<(IEnumerable<Currency>, int totalRecords)> GetAllAsync(int pageNumber, int pageSize)
         {   

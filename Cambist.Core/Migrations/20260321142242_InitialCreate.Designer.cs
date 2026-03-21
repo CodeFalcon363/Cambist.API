@@ -4,6 +4,7 @@ using Cambist.Core.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Cambist.Core.Migrations
 {
     [DbContext(typeof(CambistDbContext))]
-    partial class CambistDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260321142242_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,7 +71,7 @@ namespace Cambist.Core.Migrations
 
                     b.Property<string>("CurrencyCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CurrencyName")
                         .IsRequired()
@@ -80,40 +83,7 @@ namespace Cambist.Core.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CurrencyCode")
-                        .IsUnique();
-
                     b.ToTable("Currencies");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CurrencyCode = "NGN",
-                            CurrencyName = "Nigerian Naira",
-                            Symbol = "₦"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CurrencyCode = "USD",
-                            CurrencyName = "US Dollar",
-                            Symbol = "$"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CurrencyCode = "EUR",
-                            CurrencyName = "Euro",
-                            Symbol = "€"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CurrencyCode = "GBP",
-                            CurrencyName = "British Pound Sterling",
-                            Symbol = "£"
-                        });
                 });
 
             modelBuilder.Entity("Cambist.Core.Entities.WatchlistItem", b =>

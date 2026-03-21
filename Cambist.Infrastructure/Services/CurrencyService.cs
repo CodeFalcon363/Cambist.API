@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Cambist.Core.Constants;
-using Cambist.Core.Entities;
 using Cambist.Core.Models;
 using Cambist.Core.Models.Responses;
 using Cambist.Infrastructure.Interfaces;
@@ -55,6 +54,14 @@ namespace Cambist.Infrastructure.Services
             try
             {
                 var currency = await _currency.GetByCodeAsync(code);
+                if(currency == null)
+                {
+                    return new ApiResponse<CurrencyResponse>
+                    {
+                        Success = false,
+                        Message = ApiMessages.CurrencyNotFound
+                    };
+                }
                 var mappedCurrency = _mapper.Map<CurrencyResponse>(currency);
                 var response = new ApiResponse<CurrencyResponse>
                 {

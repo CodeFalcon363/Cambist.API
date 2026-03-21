@@ -12,8 +12,8 @@ namespace Cambist.Infrastructure.Mappings
             CreateMap<Currency, CurrencyResponse>().ReverseMap();
             CreateMap<ConversionRecord, ConversionRecordResponse>().ReverseMap();
             CreateMap<WatchlistItem, WatchlistItemResponse>().ReverseMap();
-            CreateMap<ConvertCurrencyRequest, ConversionRecord>();
-            CreateMap<AddWatchlistItemRequest, WatchlistItem>();
+            CreateMap<AddWatchlistItemRequest, WatchlistItem>()
+                .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(_ => DateTime.UtcNow));
 
         }
     }

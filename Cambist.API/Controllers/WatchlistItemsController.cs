@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Cambist.Core.Data;
-using Cambist.Core.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
 using Cambist.Infrastructure.Interfaces;
 using Cambist.Core.Models;
 using Cambist.Core.Models.Responses;
@@ -24,14 +20,13 @@ namespace Cambist.Api.Controllers
         // GET: api/WatchlistItems
         [HttpGet]
         public async Task<ActionResult<PagedResponse<IEnumerable<WatchlistItemResponse>>>> GetWatchlistItems(
-            [FromQuery] int pageNumber,[FromQuery] int pageSize)
+            [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             var response = await _watchlist.GetAllAsync(pageNumber, pageSize);
             return Ok(response);
         }
 
         // POST: api/WatchlistItems
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<ApiResponse<WatchlistItemResponse>>> PostWatchlistItem(AddWatchlistItemRequest item)
         {
@@ -39,7 +34,7 @@ namespace Cambist.Api.Controllers
             return Ok(response);
         }
 
-        // DELETE: api/WatchlistItems/5
+        // DELETE: api/WatchlistItems/{id}
         [HttpDelete("{id}")]
         public async Task<ActionResult<ApiResponse<WatchlistItemResponse>>> DeleteWatchlistItem(int id)
         {

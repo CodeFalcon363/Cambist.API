@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Cambist.Core.Data;
-using Cambist.Core.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
 using Cambist.Infrastructure.Interfaces;
 using Cambist.Core.Models;
 using Cambist.Core.Models.Requests;
@@ -23,23 +19,23 @@ namespace Cambist.Api.Controllers
 
         // GET: api/ConversionRecords
         [HttpGet]
-        public async Task<ActionResult<PagedResponse<IEnumerable<ConversionRecord>>>> GetConversionRecords(
-            [FromQuery] int pageNumber, [FromQuery] int pageSize)
+        public async Task<ActionResult<PagedResponse<IEnumerable<ConversionRecordResponse>>>> GetConversionRecords(
+            [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
             var response = await _conversion.GetAllAsync(pageNumber, pageSize);
             return Ok(response);
         }
 
-        // GET: api/ConversionRecords/5
+        // GET: api/ConversionRecords/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<ApiResponse<ConversionRecord>>> GetConversionRecord(int id)
+        public async Task<ActionResult<ApiResponse<ConversionRecordResponse>>> GetConversionRecord(int id)
         {
             var response = await _conversion.GetByIdAsync(id);
+            if (!response.Success) return NotFound(response);
             return Ok(response);
         }
 
         // POST: api/ConversionRecords
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<ApiResponse<ConversionRecordResponse>>> PostConversionRecord(ConvertCurrencyRequest record)
         {

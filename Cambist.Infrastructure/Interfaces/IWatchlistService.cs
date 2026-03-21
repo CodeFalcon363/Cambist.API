@@ -1,8 +1,6 @@
-﻿using Cambist.Core.Entities;
-using Cambist.Core.Models;
+﻿using Cambist.Core.Models;
 using Cambist.Core.Models.Responses;
 using Cambist.Core.Models.Requests;
-using Cambist.Core.Constants;
 
 
 namespace Cambist.Infrastructure.Interfaces
