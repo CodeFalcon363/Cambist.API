@@ -14,24 +14,24 @@ namespace Cambist.Infrastructure.Services
         private readonly IMapper _mapper;
         private readonly IConversionRepository _record;
         private readonly IExchangeRateService _exchangeservice;
-        private readonly ICurrencyService _currency;
+        private readonly ICurrencyRepository _currencyRepository;
 
-        public ConversionService(ILogger<ConversionService> logger, IMapper mapper, IConversionRepository record, IExchangeRateService exchangeService, ICurrencyService currency)
+        public ConversionService(ILogger<ConversionService> logger, IMapper mapper, IConversionRepository record, IExchangeRateService exchangeService, ICurrencyRepository currencyRepository)
         {
             _logger = logger;
             _mapper = mapper;
             _record = record;
             _exchangeservice = exchangeService;
-            _currency = currency;
+            _currencyRepository = currencyRepository;
         }
 
         public async Task<ApiResponse<ConversionRecordResponse>> AddAsync(ConvertCurrencyRequest request)
         {
             try
             {
-                var fromCurrencyCheck = await _currency.GetByCodeAsync(request.FromCurrency);
-                var toCurrencyCheck = await _currency.GetByCodeAsync(request.ToCurrency);
-                if (fromCurrencyCheck.Success == false || toCurrencyCheck.Success == false)
+                var fromExists = await _currencyRepository.ExistsAsync(request.FromCurrency);
+                var toExists = await _currencyRepository.ExistsAsync(request.ToCurrency);
+                if (!fromExists || !toExists)
                 {
                     return new ApiResponse<ConversionRecordResponse>
                     {

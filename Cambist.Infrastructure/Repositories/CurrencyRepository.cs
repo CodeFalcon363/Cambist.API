@@ -30,5 +30,10 @@ namespace Cambist.Infrastructure.Repositories
             var currency = await _context.Currencies.FirstOrDefaultAsync(x => x.CurrencyCode == code);
             return currency;
         }
+
+        public async Task<bool> ExistsAsync(string code)
+        {
+            return await _context.Currencies.AnyAsync(x => x.CurrencyCode == code);
+        }
     }
 }

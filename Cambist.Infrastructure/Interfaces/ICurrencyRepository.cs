@@ -6,6 +6,7 @@ namespace Cambist.Infrastructure.Interfaces
     {
         Task<(IEnumerable<Currency>, int totalRecords)> GetAllAsync(int pageNumber, int pageSize);
         Task<Currency?> GetByCodeAsync(string code);
+        Task<bool> ExistsAsync(string code);
     }
 }
  
